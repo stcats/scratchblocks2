@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<meta charset="utf8">
+<title>[scratchblocks] translator</title>
+
+<!--
+http://blob8108.github.io/scratchblocks2/translator/
+-->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js">
+</script>
+
+<link rel="stylesheet" href="../scratchblocks2.css">
+<script src="../scratchblocks2.js"></script>
+<script src="../translations-all.js" charset="utf8"></script>
+
+<style>
+textarea, #link-url, .blocks {
+  box-sizing: border-box;
+}
+h1 {
+  font-family: monospace;
+  font-size: 1.5em;
+}
+a {
+  text-decoration: none;
+  color: #008;
+}
+a:hover {
+  text-decoration: underline;
+}
+body {
+  margin: 1em 2em;
+  font-family: sans-serif;
+}
+input, button {
+  font-size: 1em;
+  font-family: inherit;
+}
+textarea {
+  font-size: 1em;
+  margin-bottom: 1em;
+  width: 100%;
+  max-width: 60em;
+  min-height: 10em;
+  height: 15em;
+}
+button {
+  display: inline-block;
+  font-size: 1.25em;
+  margin-bottom: 1em;
+  border: 1px solid #444;
+  background: #ccc;
+  box-shadow: 0 1px 1px #888;
+}
+a:active, button:active {
+  position: relative;
+  top: 1px;
+  box-shadow: none;
+}
+#link-url {
+  width: auto;
+  width: 30em;
+  max-width: 100%;
+  cursor: text;
+}
+label {
+  font-weight: bold;
+  cursor: pointer;
+}
+.choose-lang {
+  display: block;
+}
+.translate {
+  width: 50%;
+  float: left;
+}
+#footer {
+  clear: both;
+}
+</style>
+
+<h1><a href="/scratchblocks2/">[scratchblocks]</a> translator</h1>
+
+<p>For help, see the <a
+  href="http://wiki.scratch.mit.edu/wiki/Block_Plugin/Syntax">article on
+syntax</a>.
+
+<p>To save on typing, you can <a href="../generator/">generate code</a> straight
+from your 2.0 projects.</p>
+
+<small>
+  (* = language is missing some blocks,
+  † = language doesn't have Scratch 1.4 blocks)
+</small>
+
+<div>
+  <button id="translate">Translate</button>
+  <button id="clear">Clear</button>
+</div>
+
+<div class="translate">
+  <select class="choose-lang" id="choose-from">
+    <option value="">Translate from...
+    <option value="en"> English
+    <option value="de"> Deutsch (German)
+    <option value="es"> Español (Spanish)
+    <option value="fr"> Français (French)
+    <option value="zh_CN"> 中文 (Simplified Chinese)
+    <option value="pl"> Polski (Polish)
+    <option value="ja"> 日本語 (Japanese)
+    <option value="nl"> Nederlands (Dutch)
+    <option value="pt"> Português (Portugese)
+    <option value="it"> Italiano (Italian)
+    <option value="he"> עברית (Hebrew)
+    <option value="ko"> 한국어 (Korean)
+    <option value="nb">Norsk (Norwegian Bokmål) †
+    <option value="tr">Türkçe (Turkish)
+    <option value="el"> Ελληνικά (Greek)
+    <option value="ru"> Pусский (Russian)
+    <option value="ca"> Català (Catalan)
+    <option value="id">Indonesia (Indonesian)
+    <option>———
+    <option value="an"> Aragonés (Aragonese)
+    <option value="ar"> العربية (Arabic)
+    <option value="ast"> Asturianu (Asturian) †
+    <option value="bg"> Български (Bulgarian)
+    <option value="bn_IN"> বাংলা (Bengali) †
+    <option value="cs"> Čeština (Czech)
+    <option value="cy"> Cymraeg (Welsh)
+    <option value="da"> Dansk (Danish)
+    <option value="eo"> Esperanto (Esperanto)
+    <option value="et"> Eesti (Estonian)
+    <option value="eu"> Euskara (Basque)
+    <option value="fa"> فارسی (Persian) *
+    <option value="fi"> Suomi (Finnish)
+    <option value="fil"> Filipino (Filipino) *
+    <option value="fo"> Føroyskt (Faroese) *
+    <option value="fr_CA"> Français Canadien (Canadian French) *
+    <option value="ga"> Gaeilge (Irish) †
+    <option value="gl"> Galego (Galician)
+    <option value="hch"> Wixárika (Huichol) *
+    <option value="hi"> हिन्दी (Hindi)
+    <option value="hr"> Hrvatski (Croatian)
+    <option value="ht"> Kreyòl ayisyen (Haitian) *
+    <option value="hu"> Magyar (Hungarian)
+    <option value="hy"> Հայերեն (Armenian)
+    <option value="is"> Íslenska (Icelandic)
+    <option value="ja_HIRA"> にほんご (Japanese Hiragana)
+    <option value="kk"> Қазақша (Kazakh) *
+    <option value="km"> ភាសាខ្មែរ (Khmer) *
+    <option value="kn"> ಕನ್ನಡ (Kannada)
+    <option value="ku"> Kurdî / كوردی (Kurdish) *
+    <option value="ky"> Кыргызча (Kyrgyz) †
+    <option value="la"> Latina (Latin) *
+    <option value="lt"> Lietuvių (Lithuanian)
+    <option value="lv"> Latviešu (Latvian) †
+    <option value="maz"> Jñatjo (Mazahua) *
+    <option value="mk"> Македонски (Macedonian)
+    <option value="ml"> മലയാളം (Malayalam) *
+    <option value="mn"> Монгол (Mongolian) *
+    <option value="mr"> मराठी (Marathi) *
+    <option value="ms"> Bahasa Melayu (Malay) *
+    <option value="my"> ဗမာစာ (Burmese)
+    <option value="nah"> Nāhuatl (Nahuatl) *
+    <option value="ne"> नेपाली (Nepali) *
+    <option value="nn"> Nynorsk (Norwegian Nynorsk) †
+    <option value="no"> Norsk (Norwegian)
+    <option value="os"> Иронау (Ossetian) †
+    <option value="ote"> Hñähñu (Mezquital Otomi) *
+    <option value="oto"> Hñähñu (Otomi) *
+    <option value="pap"> Idoma-Nòmber (Idoma) *
+    <option value="pt_BR"> Português brasileiro (Brazilian Portuguese)
+    <option value="ro"> Română (Romanian)
+    <option value="rw"> Ikinyarwanda (Kinyarwanda) *
+    <option value="sk"> Slovenčina (Slovak)
+    <option value="sl"> Slovenščina (Slovene)
+    <option value="sr"> Српски / Srpski (Serbian)
+    <option value="sv"> Svenska (Swedish)
+    <option value="sw"> Kiswahili (Swahili) *
+    <option value="ta"> தமிழ் (Tamil) †
+    <option value="th"> ไทย (Thai) *
+    <option value="tzm"> Tamaziġt (Tamazight) †
+    <option value="ug"> ئۇيغۇر تىلى (Uyghur) *
+    <option value="uk"> Українська (Ukrainian)
+    <option value="vi"> Tiếng Việt (Vietnamese)
+    <option value="zh_TW"> 正體中文 (Traditional Chinese)
+  </select>
+  <textarea id="code-from"></textarea>
+  <pre id="preview-from" class="blocks"></pre>
+</div>
+
+<div class="translate">
+  <select class="choose-lang" id="choose-to">
+    <option value="">Translate to...
+    <option value="en"> English
+    <option value="de"> Deutsch (German)
+    <option value="es"> Español (Spanish)
+    <option value="fr"> Français (French)
+    <option value="zh_CN"> 中文 (Simplified Chinese)
+    <option value="pl"> Polski (Polish)
+    <option value="ja"> 日本語 (Japanese)
+    <option value="nl"> Nederlands (Dutch)
+    <option value="pt"> Português (Portugese)
+    <option value="it"> Italiano (Italian)
+    <option value="he"> עברית (Hebrew)
+    <option value="ko"> 한국어 (Korean)
+    <option value="nb">Norsk (Norwegian Bokmål) †
+    <option value="tr">Türkçe (Turkish)
+    <option value="el"> Ελληνικά (Greek)
+    <option value="ru"> Pусский (Russian)
+    <option value="ca"> Català (Catalan)
+    <option value="id">Indonesia (Indonesian)
+    <option>———
+    <option value="an"> Aragonés (Aragonese)
+    <option value="ar"> العربية (Arabic)
+    <option value="ast"> Asturianu (Asturian) †
+    <option value="bg"> Български (Bulgarian)
+    <option value="bn_IN"> বাংলা (Bengali) †
+    <option value="cs"> Čeština (Czech)
+    <option value="cy"> Cymraeg (Welsh)
+    <option value="da"> Dansk (Danish)
+    <option value="eo"> Esperanto (Esperanto)
+    <option value="et"> Eesti (Estonian)
+    <option value="eu"> Euskara (Basque)
+    <option value="fa"> فارسی (Persian) *
+    <option value="fi"> Suomi (Finnish)
+    <option value="fil"> Filipino (Filipino) *
+    <option value="fo"> Føroyskt (Faroese) *
+    <option value="fr_CA"> Français Canadien (Canadian French) *
+    <option value="ga"> Gaeilge (Irish) †
+    <option value="gl"> Galego (Galician)
+    <option value="hch"> Wixárika (Huichol) *
+    <option value="hi"> हिन्दी (Hindi)
+    <option value="hr"> Hrvatski (Croatian)
+    <option value="ht"> Kreyòl ayisyen (Haitian) *
+    <option value="hu"> Magyar (Hungarian)
+    <option value="hy"> Հայերեն (Armenian)
+    <option value="is"> Íslenska (Icelandic)
+    <option value="ja_HIRA"> にほんご (Japanese Hiragana)
+    <option value="kk"> Қазақша (Kazakh) *
+    <option value="km"> ភាសាខ្មែរ (Khmer) *
+    <option value="kn"> ಕನ್ನಡ (Kannada)
+    <option value="ku"> Kurdî / كوردی (Kurdish) *
+    <option value="ky"> Кыргызча (Kyrgyz) †
+    <option value="la"> Latina (Latin) *
+    <option value="lt"> Lietuvių (Lithuanian)
+    <option value="lv"> Latviešu (Latvian) †
+    <option value="maz"> Jñatjo (Mazahua) *
+    <option value="mk"> Македонски (Macedonian)
+    <option value="ml"> മലയാളം (Malayalam) *
+    <option value="mn"> Монгол (Mongolian) *
+    <option value="mr"> मराठी (Marathi) *
+    <option value="ms"> Bahasa Melayu (Malay) *
+    <option value="my"> ဗမာစာ (Burmese)
+    <option value="nah"> Nāhuatl (Nahuatl) *
+    <option value="ne"> नेपाली (Nepali) *
+    <option value="nn"> Nynorsk (Norwegian Nynorsk) †
+    <option value="no"> Norsk (Norwegian)
+    <option value="os"> Иронау (Ossetian) †
+    <option value="ote"> Hñähñu (Mezquital Otomi) *
+    <option value="oto"> Hñähñu (Otomi) *
+    <option value="pap"> Idoma-Nòmber (Idoma) *
+    <option value="pt_BR"> Português brasileiro (Brazilian Portuguese)
+    <option value="ro"> Română (Romanian)
+    <option value="rw"> Ikinyarwanda (Kinyarwanda) *
+    <option value="sk"> Slovenčina (Slovak)
+    <option value="sl"> Slovenščina (Slovene)
+    <option value="sr"> Српски / Srpski (Serbian)
+    <option value="sv"> Svenska (Swedish)
+    <option value="sw"> Kiswahili (Swahili) *
+    <option value="ta"> தமிழ் (Tamil) †
+    <option value="th"> ไทย (Thai) *
+    <option value="tzm"> Tamaziġt (Tamazight) †
+    <option value="ug"> ئۇيغۇر تىلى (Uyghur) *
+    <option value="uk"> Українська (Ukrainian)
+    <option value="vi"> Tiếng Việt (Vietnamese)
+    <option value="zh_TW"> 正體中文 (Traditional Chinese)
+  </select>
+  <textarea id="code-to"></textarea>
+  <pre id="preview-to" class="blocks"></pre>
+</div>
+
+<div id="footer">
+  <div id="link">
+    <label for="link-url" id="link-url-label">Link:</label>
+    <input type="text" id="link-url" readonly>
+  </div>
+</div>
+
+<script>
+var ga;
+
+var DEFAULT = "";
+
+choose_from = document.getElementById('choose-from');
+choose_to = document.getElementById('choose-to');
+code_from = document.getElementById('code-from');
+preview_from = document.getElementById('preview-from');
+code_to = document.getElementById('code-to');
+preview_to = document.getElementById('preview-to');
+
+link_url = document.getElementById('link-url');
+link_url_label = document.getElementById('link-url-label');
+
+var oldHash;
+
+function refresh () {
+  script = code_from.value;
+
+  script = script.replace(/\[\/?scratchblocks\]/gi, '');  // Scratch Forums
+  script = script.replace(/<\/?scratchblocks>/gi, '');  // Scratch Wiki
+  script = script.replace(/^position\:[0-9\., ]+/i, '');  // Kurt
+  script = script.trim();
+
+  oldHash = '#script='+encodeURIComponent(script);
+  if (choose_from.value) {
+    oldHash += '&from=' + encodeURIComponent(choose_from.value);
+  }
+  if (choose_to.value) {
+    oldHash += '&to=' + encodeURIComponent(choose_to.value);
+  }
+  location.hash = oldHash;
+  link_url.value = location;
+
+  // empty previews
+  var child;
+  while (child = preview_from.lastChild) {
+    preview_from.removeChild(child);
+  }
+  while (child = preview_to.lastChild) {
+    preview_to.removeChild(child);
+  }
+
+  // add script
+  preview_from.appendChild(document.createTextNode(script))
+
+  scratchblocks2.parse("pre#preview-from");
+
+  // generate the translated text
+  if (choose_to.value != "") {
+    var code = script.replace(/<br>\s?|\n|\r\n|\r/ig, '\n');
+    var scripts = scratchblocks2.parse_scripts(code);
+    var output = "";
+    for (var i=0; i<scripts.length; i++) {
+      var script = scripts[i];
+      output += render_stack(script, 0) + "\n";
+    }
+    code_to.value = output;
+    preview_to.appendChild(document.createTextNode(output))
+    scratchblocks2.parse("pre#preview-to");
+  }
+
+  if (ga !== undefined) {
+    ga('send', 'event', 'render', 'render');
+  }
+
+  console.log("refreshed");
+}
+
+function translate(spec, dict) {
+  if (spec == "define" && "define" in dict) {
+    return dict.define[0].trim();
+  }
+  if (spec in dict.flipped_aliases) {
+    return dict.flipped_aliases[spec].trim();
+  }
+  if (spec in dict.blocks && dict.blocks[spec] != '') {
+    return dict.blocks[spec].trim();
+  }
+  return spec.trim();
+}
+
+function rebuild_block(info, dict) {
+  var spec;
+  if (info.shape == "define-hat") {
+    info.blockid = "define";
+  }
+  spec = translate(info.blockid, dict);
+
+  var inserts = [];
+  for (var i=0; i < info.pieces.length; i++) {
+    var p = info.pieces[i];
+    if (typeof p === "string") continue;
+
+    var embed;
+    if (p.blockid && p.blockid.indexOf('_') !== -1) {
+      embed = rebuild_block(p, dict);
+    } else {
+      embed = p.pieces.join("");
+    }
+    switch (p.shape) {
+      case "string":
+      case "color":
+        inserts.push('['+embed+']'); break;
+      case "number":
+      case "embedded":
+        inserts.push('('+embed+')'); break;
+      case "reporter":
+        inserts.push('('+translate(embed, dict)+')'); break;
+      case "boolean":
+        inserts.push('<'+translate(embed, dict)+'>'); break;
+      case "dropdown":
+        inserts.push('['+embed+' v]'); break;
+      case "number-dropdown":
+        inserts.push('('+embed+' v)'); break;
+      default:
+        inserts.push(embed); break;
+    }
+  }
+  if (info.blockid == "define") {
+    return spec + " " + inserts.join(" ");
+  }
+
+  return spec.replace(/_/g, function() { return inserts.shift(); });
+}
+
+function render_stack(script, indent) {
+  var output = "";
+  var dict = scratchblocks2.languages[choose_to.value];
+  for (var i=0; i<script.length; i++) {
+    var info = script[i];
+    if (!info) continue;
+
+    if (info.type == "cmouth") {
+      output += render_stack(info.contents, indent + 3);
+    } else if (info.type == "cwrap") {
+      output += render_stack(info.contents, indent);
+    } else {
+      for (var j=0; j<indent; j++) { output += ' '; }
+      output += rebuild_block(info, dict);
+      if (info.comment !== undefined) {
+          output += " //" + info.comment;
+      }
+      output += "\n";
+    }
+  }
+  return output;
+}
+
+document.getElementById('translate').onclick = function () {
+  if (ga !== undefined) {
+    ga('send', 'event', 'button', 'click', 'Translate button');
+  }
+  refresh();
+}
+code_from.onkeyup = refresh;
+code_from.onblur = refresh;
+code_from.oncopy = code_from.onpaste = function(e) {
+  window.setTimeout(refresh, 100);
+}
+
+
+document.getElementById('clear').onclick = function () {
+  code_from.value = "";
+  refresh();
+  code_from.focus();
+}
+
+link_url.onclick = link_url.onfocus = link_url_label.onclick = function(e) {
+  link_url.focus();
+  link_url.select();
+
+  // Work around Chrome's little problem
+  link_url.onmouseup = function() {
+    // Prevent further mouseup intervention
+    link_url.onmouseup = null;
+    return false;
+  };
+}
+
+function checkHash() {
+  if (oldHash != location.hash) {
+    var hash = location.href.split('#')[1] || DEFAULT;
+
+    parts = hash.split('&');
+    parts.forEach(function(part) {
+      var match = /^(.*)=(.*)$/.exec(part);
+      if (!match) return;
+      var key = decodeURIComponent(match[1]);
+      var value = decodeURIComponent(match[2]);
+      switch (key) {
+        case "from":
+          choose_from.value = value;
+          break;
+        case "to":
+          choose_to.value = value;
+          break;
+        case "script":
+          code_from.value = value;
+          break;
+      }
+    });
+    reload_languages();
+  }
+  window.setTimeout(checkHash, 200);
+}
+
+function load_language(lang) {
+  var lang_dict = scratchblocks2._translations[lang];
+  if (lang_dict) {
+    scratchblocks2.load_language(lang_dict);
+  }
+
+  if (!lang_dict && lang != 'en') return;
+  var dict = scratchblocks2.languages[lang];
+  // store a dictionary of aliases
+  var flipped_aliases = {};
+  for (var k in dict.aliases) {
+    flipped_aliases[dict.aliases[k]] = k;
+  }
+  scratchblocks2.languages[lang].flipped_aliases = flipped_aliases;
+}
+
+function reload_languages() {
+  scratchblocks2.reset_languages();
+
+  load_language(choose_from.value);
+  load_language(choose_to.value);
+
+  refresh();
+}
+
+choose_from.onchange = function (e) {
+  reload_languages();
+};
+choose_to.onchange = function (e) {
+  // var lang = choose_to.value;
+  // var lang_dict = scratchblocks2._translations[lang];
+  reload_languages();
+}
+
+choose_from.value = "";
+choose_to.value = "";
+
+checkHash();
+
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-42663022-1', 'blob8108.github.io');
+  ga('send', 'pageview');
+</script>

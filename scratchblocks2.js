@@ -161,7 +161,6 @@ var scratchblocks2 = function ($) {
         aliases: {},
 
         define: [],
-        dropdowns: [],
         ignorelt: [],
         math: [],
         osis: [],
@@ -194,8 +193,6 @@ var scratchblocks2 = function ($) {
         },
 
         define: ["define"],
-
-        dropdowns: ["A connected", "all", "all around", "all motors", "B connected", "brightness", "button pressed", "C connected", "color", "costume name", "D connected", "date", "day of week", "don't rotate", "down arrow", "edge", "everything", "fisheye", "ghost", "hour", "left arrow", "left-right", "light", "lights", "minute", "month", "mosaic", "motion", "motor", "motor A", "motor B", "mouse-pointer", "myself", "not =", "off", "on", "on-flipped", "other scripts in sprite", "pixelate", "previous backdrop", "resistance-A", "resistance-B", "resistance-C", "resistance-D", "reverse", "right arrow", "second", "slider", "sound", "space", "Stage", "that way", "this script", "this sprite", "this way", "up arrow", "video motion", "whirl", "year"],
 
         // For ignoring the lt sign in the "when distance < _" block
         ignorelt: ["when distance"],

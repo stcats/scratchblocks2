@@ -501,6 +501,7 @@ function babelfish_load(lang) {
   var lang_dict = scratchblocks2.languages[lang];
   var dict = {};
   var i, k;
+  english_dropdowns = ["A connected", "all", "all around", "all motors", "B connected", "brightness", "button pressed", "C connected", "color", "costume name", "D connected", "date", "day of week", "don't rotate", "down arrow", "edge", "everything", "fisheye", "ghost", "hour", "left arrow", "left-right", "light", "lights", "minute", "month", "mosaic", "motion", "motor", "motor A", "motor B", "mouse-pointer", "myself", "not =", "off", "on", "on-flipped", "other scripts in sprite", "pixelate", "previous backdrop", "resistance-A", "resistance-B", "resistance-C", "resistance-D", "reverse", "right arrow", "second", "slider", "sound", "space", "Stage", "that way", "this script", "this sprite", "this way", "up arrow", "video motion", "whirl", "year"];
 
   // clone the blocks lookup
   for (k in lang_dict.blocks) {
@@ -513,13 +514,14 @@ function babelfish_load(lang) {
   if ("define" in lang_dict) {
     dict["define"] = lang_dict.define[0];
   }
-  for (i = 0; i < lang_dict.dropdowns.length; i++) {
-    var dropdown_key = scratchblocks2.languages['en'].dropdowns[i];
-    dict[dropdown_key] = lang_dict.dropdowns[i];
-  }
   for (i = 0; i < lang_dict.math.length; i++) {
     var math_key = scratchblocks2.languages['en'].math[i];
     dict[math_key] = lang_dict.math[i];
+  }
+  if (lang != 'en') {
+    for (i = 0; i < english_dropdowns.length; i++) {
+      dict[english_dropdowns[i]] = scratchblocks2._translations[lang].dropdowns[i];
+    }
   }
   babelfish[lang] = dict;
 }
